@@ -7,7 +7,7 @@
 - **单人游玩**：一位玩家从出生推到终老，每个年龄遇到事件、做出选择、结算属性，最后拿到一个结局。
 - **两人协作开发**：两名开发者各带一个 AI 助手并行干活，仓库是唯一的同步媒介。
 
-> **当前阶段：MVP 已可玩。** 39 个事件、5 个结局、6 属性 + 4 资源、判定与死亡结算、自动存档、移动端适配。
+> **当前阶段：MVP 已可玩。** 41 个事件、5 个结局、6 属性 + 4 资源、判定与死亡结算、自动存档、移动端适配。
 
 ## 怎么玩
 
@@ -54,10 +54,11 @@ python -m http.server 8000      # 任选其一
 │  ├─ storage.js                # localStorage 存档
 │  └─ ui.js                     # 渲染与绑定，不含规则
 ├─ data/
-│  ├─ events.json               # 39 个事件
+│  ├─ events.json               # 41 个事件
 │  └─ endings.json              # 5 个结局文案
 ├─ tools/
 │  ├─ serve.ps1                 # 一键启动的实际逻辑（找 Python / 选端口 / 开浏览器）
+│  ├─ package.ps1               # 打包成便携 zip / 安装包 exe
 │  ├─ simulate.js               # 无头批量模拟 + 数据校验
 │  └─ apply-github-settings.ps1 # 标签与分支保护一键配置
 ├─ docs/
@@ -78,6 +79,19 @@ node tools/simulate.js 500     # 500 局 × 3 种选择策略，顺带校验事�
 ```
 
 数据校验失败时退出码为 1。最新平衡数据见 [docs/测试记录.md](docs/测试记录.md)。
+
+## 打包分发
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File tools/package.ps1 -Installer
+```
+
+产物写在仓库外的 `dist/`（避免二进制进仓库）：
+
+| 文件 | 用途 |
+| --- | --- |
+| `life-simulator-v0.4.0.zip` | 便携版，解压后双击 `start.bat` |
+| `life-simulator-v0.4.0-setup.exe` | 自解压安装包，装到 `%LOCALAPPDATA%\Programs\LifeSimulator` 并创建开始菜单快捷方式 |
 
 ## 协作文档
 
