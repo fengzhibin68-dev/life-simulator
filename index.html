@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>人生模拟器</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- 开始页 -->
+    <section id="screen-start" class="screen active">
+      <div class="card center">
+        <h1>人生模拟器</h1>
+        <p class="sub">从 0 岁到终老，每一年做一个选择。</p>
+        <p class="sub small">没有正确答案，只有你的答案。</p>
+        <button id="btn-begin" class="btn primary">开始一段人生</button>
+        <p id="start-hint" class="hint"></p>
+      </div>
+    </section>
+
+    <!-- 角色创建页 -->
+    <section id="screen-create" class="screen">
+      <div class="card">
+        <h2>出生之前</h2>
+        <label class="field">
+          <span>你的名字</span>
+          <input id="input-name" type="text" maxlength="12" placeholder="无名氏">
+        </label>
+
+        <h3>出身</h3>
+        <div id="origin-list" class="option-grid"></div>
+
+        <h3>天赋（随机）</h3>
+        <div id="talent-box" class="talent"></div>
+
+        <div id="create-attrs" class="attr-preview"></div>
+
+        <button id="btn-start-life" class="btn primary">开始人生</button>
+      </div>
+    </section>
+
+    <!-- 主游戏页 -->
+    <section id="screen-game" class="screen">
+      <header class="topbar">
+        <span id="hud-name" class="hud-name"></span>
+        <span id="hud-age" class="hud-age"></span>
+        <span id="hud-stage" class="hud-stage"></span>
+        <button id="btn-restart" class="btn tiny ghost">重开</button>
+      </header>
+
+      <div class="game-grid">
+        <aside class="panel">
+          <h3 class="panel-title">属性</h3>
+          <div id="stat-attrs" class="stat-list"></div>
+          <h3 class="panel-title">资源</h3>
+          <div id="stat-resources" class="stat-list"></div>
+          <div id="tag-list" class="tags"></div>
+        </aside>
+
+        <section class="panel stage-panel">
+          <article id="event-card"></article>
+        </section>
+      </div>
+
+      <section class="panel log-panel">
+        <h3 class="panel-title">人生日志</h3>
+        <ol id="log-list" class="log-list"></ol>
+      </section>
+    </section>
+
+    <!-- 结局页 -->
+    <section id="screen-ending" class="screen">
+      <div class="card ending">
+        <p class="ending-label">你的人生结束了</p>
+        <h1 id="ending-title"></h1>
+        <p id="ending-text" class="ending-text"></p>
+        <p id="ending-epitaph" class="epitaph"></p>
+        <dl id="ending-stats" class="ending-stats"></dl>
+        <h3>人生片段</h3>
+        <ul id="ending-highlights" class="highlights"></ul>
+        <button id="btn-again" class="btn primary">再来一次</button>
+      </div>
+    </section>
+
+    <footer class="foot">人生模拟器 · MVP</footer>
+  </main>
+
+  <script src="src/core.js"></script>
+  <script src="src/storage.js"></script>
+  <script src="src/ui.js"></script>
+</body>
+</html>
