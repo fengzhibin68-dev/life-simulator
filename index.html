@@ -29,13 +29,20 @@
           <input id="input-name" type="text" maxlength="12" placeholder="无名氏">
         </label>
 
+        <h3>游戏模式</h3>
+        <div id="mode-list" class="option-grid two"></div>
+
+        <h3>属性 <span id="attr-budget" class="budget"></span></h3>
+        <div id="attr-editor" class="attr-editor"></div>
+        <div id="attr-tools" class="attr-tools"></div>
+        <p id="attr-hint" class="hint"></p>
+
         <h3>出身</h3>
-        <div id="origin-list" class="option-grid"></div>
+        <div id="origin-list" class="option-grid two"></div>
+        <div id="origin-custom" class="origin-custom hidden"></div>
 
-        <h3>天赋（随机）</h3>
-        <div id="talent-box" class="talent"></div>
-
-        <div id="create-attrs" class="attr-preview"></div>
+        <h3>天赋</h3>
+        <div id="talent-list" class="talent-list"></div>
 
         <button id="btn-start-life" class="btn primary">开始人生</button>
       </div>

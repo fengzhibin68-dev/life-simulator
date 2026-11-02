@@ -21,6 +21,10 @@
   // 每年压力自然缓解量（平衡参数，见 docs/需求.md 的待确认 Q3）
   const STRESS_RECOVERY = 3;
 
+  // 开局属性分配（见 docs/接口.md「属性分配」）
+  const ATTR_POINT_TOTAL = 300;
+  const ATTR_ALLOC_MAX = 100;
+
   const ATTR_LABELS = {
     intelligence: '智力',
     charm: '魅力',
@@ -45,9 +49,26 @@
   };
 
   const ORIGINS = {
-    normal: { name: '普通家庭', desc: '什么都不多，什么都够用' },
-    rich: { name: '富裕家庭', desc: '金钱 +5000，压力 +10' },
-    poor: { name: '困难家庭', desc: '金钱 -1000，意志 +8' }
+    normal: {
+      name: '普通家庭',
+      desc: '起始金钱 1000，压力 0，幸福 50',
+      start: { money: 1000, stress: 0, happiness: 50 }
+    },
+    rich: {
+      name: '富裕家庭',
+      desc: '起始金钱 6000，压力 +10',
+      start: { money: 6000, stress: 10, happiness: 50 }
+    },
+    poor: {
+      name: '困难家庭',
+      desc: '起始金钱 0，没有启动资金',
+      start: { money: 0, stress: 0, happiness: 50 }
+    },
+    custom: {
+      name: '自定义',
+      desc: '起始金钱 / 压力 / 幸福自己填',
+      start: { money: 1000, stress: 0, happiness: 50 }
+    }
   };
 
   // 年龄 -> 每年基础死亡概率
@@ -99,24 +120,70 @@
     return list[list.length - 1];
   }
 
+  // ---------------------------------------------------------------- 属性分配
+  /**
+   * 校验开局的属性分配：每项取整并夹到 0~100，总和不得超过 300。
+   * 返回 { ok, spent, remaining, values, errors }，values 可直接喂给 createGame。
+   */
+  function validateAttrs(attrs) {
+    const values = {};
+    const errors = [];
+    let spent = 0;
+
+    for (const key of ATTRS) {
+      const raw = attrs ? Number(attrs[key]) : NaN;
+      let value = isFinite(raw) ? Math.round(raw) : 0;
+
+      if (value < 0) {
+        errors.push(key + ' 不能小于 0');
+        value = 0;
+      } else if (value > ATTR_ALLOC_MAX) {
+        errors.push(key + ' 不能大于 ' + ATTR_ALLOC_MAX);
+        value = ATTR_ALLOC_MAX;
+      }
+
+      values[key] = value;
+      spent += value;
+    }
+
+    const remaining = ATTR_POINT_TOTAL - spent;
+    if (remaining < 0) {
+      errors.push('属性点超出预算：已用 ' + spent + ' / ' + ATTR_POINT_TOTAL);
+    }
+
+    return { ok: errors.length === 0, spent: spent, remaining: remaining, values: values, errors: errors };
+  }
+
+  function numberOr(value, fallback) {
+    const num = Number(value);
+    return isFinite(num) ? num : fallback;
+  }
+
   // ---------------------------------------------------------------- 初始化
   function createGame(seed, options) {
     const opts = options || {};
     const origin = ORIGINS[opts.origin] ? opts.origin : 'normal';
     const talent = TALENTS[opts.talent] ? opts.talent : 'scholar';
+    const attrMode = opts.attrMode === 'random' ? 'random' : 'alloc';
+
+    // 不传 attrs 时按全 50 兜底：tools/simulate.js 和旧调用都还按老方式跑
+    const allocated = validateAttrs(opts.attrs || { intelligence: 50, charm: 50, constitution: 50, eq: 50, will: 50, luck: 50 });
+    // 随机人生每项独立随机，不受 300 点预算约束；自由加点才校验
+    if (attrMode !== 'random' && allocated.remaining < 0) {
+      throw new Error('属性点超出预算：' + allocated.spent + ' / ' + ATTR_POINT_TOTAL);
+    }
 
     const attrs = {};
-    for (const key of ATTRS) attrs[key] = 50;
+    for (const key of ATTRS) attrs[key] = allocated.values[key];
 
-    const resources = { money: 1000, health: 100, stress: 0, happiness: 50 };
-
-    if (origin === 'rich') {
-      resources.money += 5000;
-      resources.stress += 10;
-    } else if (origin === 'poor') {
-      resources.money = Math.max(0, resources.money - 1000);
-      attrs.will += 8;
-    }
+    const base = ORIGINS[origin].start;
+    const override = opts.startResources || {};
+    const resources = {
+      money: Math.max(0, Math.round(numberOr(override.money, base.money))),
+      health: clamp(Math.round(numberOr(override.health, 100)), 0, 100),
+      stress: clamp(Math.round(numberOr(override.stress, base.stress)), 0, 100),
+      happiness: clamp(Math.round(numberOr(override.happiness, base.happiness)), 0, 100)
+    };
 
     return {
       version: VERSION,
@@ -126,6 +193,7 @@
       age: 0,
       origin: origin,
       talent: talent,
+      attrMode: attrMode,
       attrs: attrs,
       resources: resources,
       tags: [],
@@ -160,7 +228,8 @@
 
       if (ATTRS.indexOf(key) >= 0) {
         const before = state.attrs[key];
-        state.attrs[key] = clamp(before + delta, 0, 100);
+        // 开局后属性只保留下限 0，不再夹上限（见 docs/需求.md「属性与资源」）
+        state.attrs[key] = Math.max(0, before + delta);
         changes.push({ key: key, label: ATTR_LABELS[key], delta: state.attrs[key] - before });
       } else if (key === 'health') {
         const before = state.resources.health;
@@ -470,8 +539,11 @@
     RESOURCE_LABELS: RESOURCE_LABELS,
     TALENTS: TALENTS,
     ORIGINS: ORIGINS,
+    ATTR_POINT_TOTAL: ATTR_POINT_TOTAL,
+    ATTR_ALLOC_MAX: ATTR_ALLOC_MAX,
     ENDING_ORDER: ENDING_ORDER,
     createGame: createGame,
+    validateAttrs: validateAttrs,
     applyEffects: applyEffects,
     applyHealthDelta: applyHealthDelta,
     addTag: addTag,
