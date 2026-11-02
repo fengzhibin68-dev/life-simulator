@@ -42,8 +42,8 @@
 ## 本地开始
 
 ```bash
-git clone https://github.com/sssttt972/Homework.git
-cd Homework
+git clone https://github.com/fengzhibin68-dev/life-simulator.git
+cd life-simulator
 git config user.name  "你的名字"
 git config user.email "你的邮箱"
 git config commit.template .gitmessage   # 可选：提交时带模板

@@ -5,11 +5,11 @@
 #          （docs/github-settings.md 里建议等第二位协作者加入后再开）
 
 # 兜底：仓库所有内容默认由仓库主评审
-*                       @sssttt972
+*                       @fengzhibin68-dev
 
 # 第二位协作者加入仓库后，取消下面注释并填上对方的 GitHub 用户名：
 #
-# *                     @sssttt972 @第二位协作者用户名
+# *                     @fengzhibin68-dev @第二位协作者用户名
 # /docs/                @第二位协作者用户名
-# /.github/             @sssttt972
+# /.github/             @fengzhibin68-dev
 # /src/                 @第二位协作者用户名
