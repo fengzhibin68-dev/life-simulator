@@ -20,6 +20,10 @@ trim_trailing_whitespace = false
 [*.{py,ps1,psm1}]
 indent_size = 4
 
+# PowerShell 5.1 按 ANSI 读脚本，带中文的 .ps1 必须存成 UTF-8 with BOM
+[*.ps1]
+charset = utf-8-bom
+
 [*.go]
 indent_style = tab
 

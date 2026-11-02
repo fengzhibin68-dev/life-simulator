@@ -91,19 +91,160 @@
   }
 
   // ------------------------------------------------------------ 创建页
+  var pendingMode = 'alloc';
+  var pendingAttrs = null;
+  var pendingOrigin = 'normal';
+  var pendingCustom = { money: 1000, stress: 0, happiness: 50 };
+  var pendingTalent = null;
+
+  function clampNumber(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function blankAttrs(value) {
+    var attrs = {};
+    C.ATTRS.forEach(function (key) { attrs[key] = value; });
+    return attrs;
+  }
+
+  function randomTalent() {
+    return TALENT_POOL[Math.floor(Math.random() * TALENT_POOL.length)];
+  }
+
   function enterCreate() {
+    pendingMode = 'alloc';
+    pendingAttrs = blankAttrs(Math.floor(C.ATTR_POINT_TOTAL / C.ATTRS.length));
     pendingOrigin = 'normal';
-    pendingTalent = TALENT_POOL[Math.floor(Math.random() * TALENT_POOL.length)];
+    pendingCustom = { money: 1000, stress: 0, happiness: 50 };
+    pendingTalent = randomTalent();
+    renderModes();
+    renderAttrEditor();
     renderOrigins();
-    renderTalent();
-    renderAttrPreview();
+    renderTalents();
     show('screen-create');
+  }
+
+  function renderModes() {
+    var box = $('mode-list');
+    box.innerHTML = '';
+    [
+      { key: 'alloc', name: '自由加点', desc: '自己把 300 点分到六项属性，天赋自选' },
+      { key: 'random', name: '随机人生', desc: '属性和天赋随机，开局前看不到' }
+    ].forEach(function (mode) {
+      var card = make('div', 'origin' + (mode.key === pendingMode ? ' selected' : ''));
+      card.appendChild(make('strong', '', mode.name));
+      card.appendChild(make('em', '', mode.desc));
+      card.addEventListener('click', function () {
+        if (pendingMode === mode.key) return;
+        pendingMode = mode.key;
+        renderModes();
+        renderAttrEditor();
+        renderTalents();
+      });
+      box.appendChild(card);
+    });
+  }
+
+  function renderAttrEditor() {
+    var box = $('attr-editor');
+    var tools = $('attr-tools');
+    var budget = $('attr-budget');
+    var hint = $('attr-hint');
+    box.innerHTML = '';
+    tools.innerHTML = '';
+    budget.textContent = '';
+    hint.textContent = '';
+
+    if (pendingMode === 'random') {
+      box.appendChild(make('p', 'random-note', '属性和天赋随机生成，开始前不显示，点「开始人生」后揭晓。'));
+      return;
+    }
+
+    var stats = C.validateAttrs(pendingAttrs);
+    budget.textContent = '已用 ' + stats.spent + ' / ' + C.ATTR_POINT_TOTAL + '，剩余 ' + stats.remaining;
+
+    C.ATTRS.forEach(function (key) {
+      var value = pendingAttrs[key];
+      var row = make('div', 'attr-row');
+
+      var head = make('div', 'attr-head');
+      head.appendChild(make('span', 'attr-name', C.ATTR_LABELS[key]));
+      head.appendChild(make('span', 'attr-value', String(value)));
+      row.appendChild(head);
+
+      var bar = make('div', 'bar');
+      var fill = make('i');
+      fill.style.width = Math.round(value / C.ATTR_ALLOC_MAX * 100) + '%';
+      bar.appendChild(fill);
+      row.appendChild(bar);
+
+      var ctrl = make('div', 'stepper');
+      var minus = make('button', 'step', '−');
+      minus.type = 'button';
+      minus.disabled = value <= 0;
+      minus.addEventListener('click', function () { adjustAttr(key, -1); });
+      var plus = make('button', 'step', '+');
+      plus.type = 'button';
+      plus.disabled = value >= C.ATTR_ALLOC_MAX || stats.remaining <= 0;
+      plus.addEventListener('click', function () { adjustAttr(key, 1); });
+      ctrl.appendChild(minus);
+      ctrl.appendChild(plus);
+      row.appendChild(ctrl);
+
+      box.appendChild(row);
+    });
+
+    if (stats.remaining > 0) {
+      hint.textContent = '还剩 ' + stats.remaining + ' 点未分配，也可以直接开始。';
+    }
+
+    var clear = make('button', 'btn tiny ghost', '清空');
+    clear.type = 'button';
+    clear.addEventListener('click', function () {
+      pendingAttrs = blankAttrs(0);
+      renderAttrEditor();
+    });
+    var even = make('button', 'btn tiny ghost', '均分');
+    even.type = 'button';
+    even.addEventListener('click', function () {
+      pendingAttrs = blankAttrs(Math.floor(C.ATTR_POINT_TOTAL / C.ATTRS.length));
+      renderAttrEditor();
+    });
+    var rand = make('button', 'btn tiny ghost', '随机分配');
+    rand.type = 'button';
+    rand.addEventListener('click', function () {
+      pendingAttrs = randomAllocation();
+      renderAttrEditor();
+    });
+    tools.appendChild(clear);
+    tools.appendChild(even);
+    tools.appendChild(rand);
+  }
+
+  function adjustAttr(key, delta) {
+    var stats = C.validateAttrs(pendingAttrs);
+    if (delta > 0 && stats.remaining <= 0) return;
+    pendingAttrs[key] = clampNumber(pendingAttrs[key] + delta, 0, C.ATTR_ALLOC_MAX);
+    renderAttrEditor();
+  }
+
+  // 把 300 点在 0~100 之间随机铺开，保证不超预算
+  function randomAllocation() {
+    var attrs = blankAttrs(0);
+    var left = C.ATTR_POINT_TOTAL;
+    while (left > 0) {
+      var key = C.ATTRS[Math.floor(Math.random() * C.ATTRS.length)];
+      if (attrs[key] >= C.ATTR_ALLOC_MAX) continue;
+      attrs[key] += 1;
+      left -= 1;
+    }
+    return attrs;
   }
 
   function renderOrigins() {
     var box = $('origin-list');
     box.innerHTML = '';
-    ['normal', 'rich', 'poor'].forEach(function (key) {
+    ['normal', 'rich', 'poor', 'custom'].forEach(function (key) {
       var info = C.ORIGINS[key];
       var card = make('div', 'origin' + (key === pendingOrigin ? ' selected' : ''));
       card.appendChild(make('strong', '', info.name));
@@ -111,30 +252,57 @@
       card.addEventListener('click', function () {
         pendingOrigin = key;
         renderOrigins();
-        renderAttrPreview();
       });
       box.appendChild(card);
     });
+    renderCustomOrigin();
   }
 
-  function renderTalent() {
-    var info = C.TALENTS[pendingTalent];
-    var box = $('talent-box');
+  function renderCustomOrigin() {
+    var box = $('origin-custom');
     box.innerHTML = '';
-    box.appendChild(make('strong', '', info.name));
-    box.appendChild(document.createTextNode(' —— ' + info.desc));
+    box.classList.toggle('hidden', pendingOrigin !== 'custom');
+    if (pendingOrigin !== 'custom') return;
+
+    [
+      { key: 'money', label: '起始金钱', min: 0, max: 100000 },
+      { key: 'stress', label: '起始压力', min: 0, max: 50 },
+      { key: 'happiness', label: '起始幸福', min: 0, max: 100 }
+    ].forEach(function (field) {
+      var label = make('label', 'field inline');
+      label.appendChild(make('span', '', field.label));
+      var input = document.createElement('input');
+      input.type = 'number';
+      input.min = String(field.min);
+      input.max = String(field.max);
+      input.value = String(pendingCustom[field.key]);
+      input.addEventListener('input', function () {
+        var value = Math.round(Number(input.value));
+        if (!isFinite(value)) value = field.min;
+        pendingCustom[field.key] = clampNumber(value, field.min, field.max);
+      });
+      label.appendChild(input);
+      box.appendChild(label);
+    });
   }
 
-  function renderAttrPreview() {
-    var box = $('create-attrs');
+  function renderTalents() {
+    var box = $('talent-list');
     box.innerHTML = '';
-    var preview = { intelligence: 50, charm: 50, constitution: 50, eq: 50, will: 50, luck: 50 };
-    if (pendingOrigin === 'poor') preview.will += 8;
-    C.ATTRS.forEach(function (key) {
-      var cell = make('div');
-      cell.appendChild(make('b', '', String(preview[key])));
-      cell.appendChild(document.createTextNode(C.ATTR_LABELS[key]));
-      box.appendChild(cell);
+    if (pendingMode === 'random') {
+      box.appendChild(make('p', 'random-note', '天赋随机，开始后揭晓。'));
+      return;
+    }
+    TALENT_POOL.forEach(function (key) {
+      var info = C.TALENTS[key];
+      var card = make('div', 'talent-card' + (key === pendingTalent ? ' selected' : ''));
+      card.appendChild(make('strong', '', info.name));
+      card.appendChild(make('em', '', info.desc));
+      card.addEventListener('click', function () {
+        pendingTalent = key;
+        renderTalents();
+      });
+      box.appendChild(card);
     });
   }
 
@@ -143,7 +311,27 @@
     var name = (nameInput.value || '').trim() || '无名氏';
     var seed = ((Date.now() & 0xffffffff) ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
 
-    state = C.createGame(seed, { origin: pendingOrigin, talent: pendingTalent, name: name });
+    var attrs;
+    var talent;
+    if (pendingMode === 'random') {
+      attrs = {};
+      C.ATTRS.forEach(function (key) {
+        attrs[key] = Math.floor(Math.random() * (C.ATTR_ALLOC_MAX + 1));
+      });
+      talent = randomTalent();
+    } else {
+      attrs = pendingAttrs;
+      talent = pendingTalent;
+    }
+
+    state = C.createGame(seed, {
+      origin: pendingOrigin,
+      talent: talent,
+      name: name,
+      attrs: attrs,
+      attrMode: pendingMode,
+      startResources: pendingOrigin === 'custom' ? pendingCustom : null
+    });
     currentEvent = null;
     S.save(state);
     enterGame();
