@@ -1,0 +1,27 @@
+# 编辑器统一配置：减少两人之间无意义的 diff
+# 文档：https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.{yml,yaml,json,jsonc,md}]
+indent_size = 2
+
+[*.md]
+# Markdown 行尾两个空格表示换行，不能裁掉
+trim_trailing_whitespace = false
+
+[*.{py,ps1,psm1}]
+indent_size = 4
+
+[*.go]
+indent_style = tab
+
+[Makefile]
+indent_style = tab

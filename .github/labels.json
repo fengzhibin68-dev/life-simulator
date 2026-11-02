@@ -1,0 +1,20 @@
+[
+  { "name": "type/feat", "color": "1D76DB", "description": "新功能" },
+  { "name": "type/fix", "color": "D73A4A", "description": "缺陷修复" },
+  { "name": "type/docs", "color": "0075CA", "description": "文档" },
+  { "name": "type/refactor", "color": "6F42C1", "description": "重构，不改变行为" },
+  { "name": "type/test", "color": "0E8A16", "description": "测试相关" },
+  { "name": "type/chore", "color": "BFD4F2", "description": "杂项：配置、工具、依赖" },
+  { "name": "area/game", "color": "FBCA04", "description": "核心玩法与数值" },
+  { "name": "area/ui", "color": "C5DEF5", "description": "界面与表现" },
+  { "name": "area/data", "color": "BFDADC", "description": "数据、事件表、存档" },
+  { "name": "area/infra", "color": "5319E7", "description": "构建、CI、仓库配置" },
+  { "name": "status/blocked", "color": "B60205", "description": "被阻塞，需要先解决别的" },
+  { "name": "status/needs-review", "color": "F9D0C4", "description": "等待评审" },
+  { "name": "status/wip", "color": "FEF2C0", "description": "进行中，未完成勿合并" },
+  { "name": "priority/p0", "color": "B60205", "description": "最高优先级，先做这个" },
+  { "name": "priority/p1", "color": "E99695", "description": "本阶段必须完成" },
+  { "name": "priority/p2", "color": "FBCA04", "description": "有空再做" },
+  { "name": "good first issue", "color": "7057FF", "description": "适合先上手的任务" },
+  { "name": "help wanted", "color": "008672", "description": "需要对方接手或协助" }
+]

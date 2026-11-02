@@ -1,0 +1,77 @@
+name: ✨ 功能需求
+description: 想加一条玩法、一段剧情，或一项工程能力
+title: "feat: "
+labels: ["type/feat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        先写清「为什么」，再写「怎么做」。涉及数据结构或双人协作机制的改动，必须先在这个 Issue 里达成一致再写代码。
+
+  - type: textarea
+    id: background
+    attributes:
+      label: 需求背景
+      description: 现在缺什么？不做会怎样？
+      placeholder: 目前两人只能各自回合，缺少需要协商才能推进的抉择，协作感不足
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 期望效果
+      description: 玩家看到 / 体验到什么？尽量具体到界面或数值
+    validations:
+      required: true
+
+  - type: dropdown
+    id: coop
+    attributes:
+      label: 对双人协作的影响
+      options:
+        - 核心协作机制（两人必须协商）
+        - 增强协作体验（可选配合）
+        - 单人也能玩，不影响协作
+        - 不属于玩法，属于工程质量
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 涉及模块
+      options:
+        - 玩法 / 数值
+        - 界面 / 表现
+        - 数据 / 存档
+        - 工程 / CI / 仓库配置
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+      description: 满足哪几条就算做完？可逐条勾选
+      placeholder: |
+        - [ ] 两人都确认后事件才推进
+        - [ ] 意见不一致时进入协商回合
+        - [ ] 数值变化有可见反馈
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 备选方案 / 不做什么
+      description: 可选。写清边界，避免 PR 越做越大
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级
+      options:
+        - P0 必须先做
+        - P1 本阶段要做
+        - P2 以后再说

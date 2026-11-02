@@ -1,0 +1,15 @@
+# CODEOWNERS：声明「哪些路径由谁负责评审」
+# 文档：https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# 生效条件：main 分支保护里勾选 "Require review from Code Owners"
+#          （docs/github-settings.md 里建议等第二位协作者加入后再开）
+
+# 兜底：仓库所有内容默认由仓库主评审
+*                       @sssttt972
+
+# 第二位协作者加入仓库后，取消下面注释并填上对方的 GitHub 用户名：
+#
+# *                     @sssttt972 @第二位协作者用户名
+# /docs/                @第二位协作者用户名
+# /.github/             @sssttt972
+# /src/                 @第二位协作者用户名

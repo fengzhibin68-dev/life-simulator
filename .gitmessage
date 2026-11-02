@@ -1,0 +1,22 @@
+
+# <type>(<scope>): <一句话描述，中文可以，不要句号>
+#
+# type 取值：
+#   feat     新功能
+#   fix      缺陷修复
+#   docs     文档
+#   style    格式（不影响逻辑）
+#   refactor 重构（不改行为）
+#   perf     性能优化
+#   test     测试
+#   build    构建 / 依赖
+#   ci       CI 配置
+#   chore    杂项（工具、配置）
+#   revert   回滚
+#
+# scope 可选，小写英文，例如 game / ui / data / ci
+# 示例：
+#   feat(game): 加入双人共同决策回合
+#   fix(ui): 修复属性面板在小屏下溢出
+#
+# 第一行不超过 72 个字符；详情空一行后再写。

@@ -1,0 +1,55 @@
+name: CI
+
+# 这是「与技术栈无关」的仓库自检流水线：
+# 检查必需文件是否齐全、PR 标题是否符合提交规范、改动里有没有冲突标记或超大文件。
+# 等确定技术栈后，在 hygiene 之外再加 build / test / lint 三个 job，
+# 并把它们一起加进 main 分支保护的必需检查列表。
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hygiene:
+    # job 名就是分支保护里要勾选的检查名，改名请同步更新 docs/github-settings.md
+    name: hygiene
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 必需文件检查
+        run: bash .github/scripts/check-required-files.sh
+
+      - name: 分支命名检查
+        if: github.event_name == 'pull_request'
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          AUTHOR: ${{ github.actor }}
+        run: bash .github/scripts/check-branch-name.sh
+
+      - name: PR 标题检查
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: bash .github/scripts/check-pr-title.sh
+
+      - name: 改动内容检查
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: bash .github/scripts/check-changes.sh

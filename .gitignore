@@ -1,0 +1,75 @@
+# 技术栈未定，先按常见栈预置忽略规则；确定后删掉用不到的部分
+
+# ---------- 操作系统 ----------
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ---------- 编辑器 / IDE ----------
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.fleet/
+
+# ---------- 密钥与环境变量（永远不要提交） ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+
+# ---------- 日志与临时文件 ----------
+*.log
+logs/
+tmp/
+.cache/
+.tmp/
+
+# ---------- Node / 前端 ----------
+node_modules/
+dist/
+build/
+out/
+coverage/
+.pnpm-store/
+*.tsbuildinfo
+.eslintcache
+.vite/
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# ---------- Godot ----------
+.godot/
+*.translation
+export_credentials.cfg
+
+# ---------- Unity ----------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+*.csproj
+*.sln
+*.userprefs
