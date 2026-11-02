@@ -39,7 +39,10 @@ function validate() {
     if (!ALLOWED_STAGES.has(e.stage)) problems.push(`${at}: stage 非法（${e.stage}）`);
     if (typeof e.ageMin !== 'number' || typeof e.ageMax !== 'number') problems.push(`${at}: 年龄区间缺失`);
     if (e.ageMin > e.ageMax) problems.push(`${at}: ageMin > ageMax`);
-    if (!Array.isArray(e.options) || e.options.length < 2) problems.push(`${at}: 选项少于 2 个`);
+    // 自动事件（婴幼儿生病等，父母代为处理）只有 1 个选项，其余事件要 2~3 个
+    const minOptions = e.auto ? 1 : 2;
+    if (!Array.isArray(e.options) || e.options.length < minOptions) problems.push(`${at}: 选项少于 ${minOptions} 个`);
+    if (e.auto && e.options && e.options.length !== 1) problems.push(`${at}: auto 事件应只有 1 个选项`);
     if ((e.weight || 0) < 1) problems.push(`${at}: weight 必须 >= 1`);
 
     for (const [i, o] of (e.options || []).entries()) {

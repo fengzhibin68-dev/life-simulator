@@ -11,8 +11,6 @@
   var data = { events: [], endings: {} };
   var state = null;
   var currentEvent = null;
-  var pendingOrigin = 'normal';
-  var pendingTalent = null;
   var TALENT_POOL = ['scholar', 'social', 'iron', 'lucky'];
 
   function $(id) { return document.getElementById(id); }
@@ -96,6 +94,7 @@
   var pendingOrigin = 'normal';
   var pendingCustom = { money: 1000, stress: 0, happiness: 50 };
   var pendingTalent = null;
+  var attrFills = {};
 
   function clampNumber(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -113,7 +112,7 @@
 
   function enterCreate() {
     pendingMode = 'alloc';
-    pendingAttrs = blankAttrs(Math.floor(C.ATTR_POINT_TOTAL / C.ATTRS.length));
+    pendingAttrs = blankAttrs(0);
     pendingOrigin = 'normal';
     pendingCustom = { money: 1000, stress: 0, happiness: 50 };
     pendingTalent = randomTalent();
@@ -157,46 +156,38 @@
 
     if (pendingMode === 'random') {
       box.appendChild(make('p', 'random-note', '属性和天赋随机生成，开始前不显示，点「开始人生」后揭晓。'));
+      var randomStart = $('btn-start-life');
+      if (randomStart) randomStart.disabled = false;
       return;
     }
 
-    var stats = C.validateAttrs(pendingAttrs);
-    budget.textContent = '已用 ' + stats.spent + ' / ' + C.ATTR_POINT_TOTAL + '，剩余 ' + stats.remaining;
-
+    attrFills = {};
     C.ATTRS.forEach(function (key) {
-      var value = pendingAttrs[key];
       var row = make('div', 'attr-row');
 
       var head = make('div', 'attr-head');
       head.appendChild(make('span', 'attr-name', C.ATTR_LABELS[key]));
-      head.appendChild(make('span', 'attr-value', String(value)));
+
+      var input = make('input', 'attr-input');
+      input.type = 'text';
+      input.inputMode = 'numeric';
+      input.autocomplete = 'off';
+      input.maxLength = 3;
+      input.value = String(pendingAttrs[key]);
+      input.setAttribute('aria-label', C.ATTR_LABELS[key] + '点数');
+      input.addEventListener('input', function () { onAttrInput(key, input); });
+      input.addEventListener('blur', function () { input.value = String(pendingAttrs[key]); });
+      head.appendChild(input);
       row.appendChild(head);
 
       var bar = make('div', 'bar');
       var fill = make('i');
-      fill.style.width = Math.round(value / C.ATTR_ALLOC_MAX * 100) + '%';
       bar.appendChild(fill);
       row.appendChild(bar);
 
-      var ctrl = make('div', 'stepper');
-      var minus = make('button', 'step', '−');
-      minus.type = 'button';
-      minus.disabled = value <= 0;
-      minus.addEventListener('click', function () { adjustAttr(key, -1); });
-      var plus = make('button', 'step', '+');
-      plus.type = 'button';
-      plus.disabled = value >= C.ATTR_ALLOC_MAX || stats.remaining <= 0;
-      plus.addEventListener('click', function () { adjustAttr(key, 1); });
-      ctrl.appendChild(minus);
-      ctrl.appendChild(plus);
-      row.appendChild(ctrl);
-
+      attrFills[key] = fill;
       box.appendChild(row);
     });
-
-    if (stats.remaining > 0) {
-      hint.textContent = '还剩 ' + stats.remaining + ' 点未分配，也可以直接开始。';
-    }
 
     var clear = make('button', 'btn tiny ghost', '清空');
     clear.type = 'button';
@@ -219,13 +210,45 @@
     tools.appendChild(clear);
     tools.appendChild(even);
     tools.appendChild(rand);
+
+    syncAttrSummary();
   }
 
-  function adjustAttr(key, delta) {
+  // 只允许数字；超过单项上限就截断；汇总超预算时禁用「开始人生」
+  function onAttrInput(key, input) {
+    var digits = String(input.value).replace(/\D/g, '').slice(0, 3);
+    var value = digits === '' ? 0 : parseInt(digits, 10);
+    if (value > C.ATTR_ALLOC_MAX) {
+      value = C.ATTR_ALLOC_MAX;
+      digits = String(value);
+    }
+    if (input.value !== digits) input.value = digits;
+    pendingAttrs[key] = value;
+    syncAttrSummary();
+  }
+
+  function syncAttrSummary() {
     var stats = C.validateAttrs(pendingAttrs);
-    if (delta > 0 && stats.remaining <= 0) return;
-    pendingAttrs[key] = clampNumber(pendingAttrs[key] + delta, 0, C.ATTR_ALLOC_MAX);
-    renderAttrEditor();
+    var budget = $('attr-budget');
+    var hint = $('attr-hint');
+    var startBtn = $('btn-start-life');
+
+    budget.textContent = '已用 ' + stats.spent + ' / ' + C.ATTR_POINT_TOTAL;
+
+    if (stats.remaining < 0) {
+      hint.textContent = '超出 ' + (-stats.remaining) + ' 点，请减少后再开始。';
+      if (startBtn) startBtn.disabled = true;
+    } else {
+      hint.textContent = stats.remaining > 0
+        ? '还剩 ' + stats.remaining + ' 点未分配，也可以直接开始。'
+        : '正好用完 300 点。';
+      if (startBtn) startBtn.disabled = false;
+    }
+
+    C.ATTRS.forEach(function (key) {
+      var fill = attrFills[key];
+      if (fill) fill.style.width = Math.round(pendingAttrs[key] / C.ATTR_ALLOC_MAX * 100) + '%';
+    });
   }
 
   // 把 300 点在 0~100 之间随机铺开，保证不超预算
@@ -320,6 +343,10 @@
       });
       talent = randomTalent();
     } else {
+      if (C.validateAttrs(pendingAttrs).remaining < 0) {
+        $('attr-hint').textContent = '点数超出 300，请先减少再开始。';
+        return;
+      }
       attrs = pendingAttrs;
       talent = pendingTalent;
     }
@@ -340,10 +367,20 @@
 
   // ------------------------------------------------------------ 游戏页
   function enterGame() {
+    renderBirthLine();
     renderHud();
     renderStats();
     renderLog();
     show('screen-game');
+  }
+
+  function renderBirthLine() {
+    var line = $('birth-line');
+    if (!line) return;
+    if (!state.birth) {
+      state.birth = C.describeBirth(state.seed, state.resources.money);
+    }
+    line.textContent = state.birth.text;
   }
 
   function renderHud() {

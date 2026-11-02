@@ -156,7 +156,46 @@
 
   function numberOr(value, fallback) {
     const num = Number(value);
-    return isFinite(num) ? num : fallback;
+    if (isFinite(num)) return num;
+    return fallback;
+  }
+
+  // ---------------------------------------------------------------- 出生描述
+  // 地点按起始金钱加权（越有钱越可能是大城市），家庭档位直接按金钱分档。
+  // 只吃 seed 与 money，不动 rngState，保证同一局的事件序列不受影响。
+  const BIRTH_FAMILY_LEVELS = [
+    { max: 1000, name: '贫困' },
+    { max: 5000, name: '温饱' },
+    { max: 20000, name: '小康' },
+    { max: 100000, name: '富裕' },
+    { max: Infinity, name: '优渥' }
+  ];
+
+  function familyLevelOf(money) {
+    for (const level of BIRTH_FAMILY_LEVELS) {
+      if (money < level.max) return level.name;
+    }
+    return '优渥';
+  }
+
+  function birthPlaceOf(money, roll) {
+    if (money < 1000) return roll < 70 ? '农村' : '县城';
+    if (money < 5000) return roll < 40 ? '县城' : (roll < 80 ? '三线城市' : '二线城市');
+    if (money < 20000) return roll < 20 ? '三线城市' : (roll < 70 ? '二线城市' : '一线城市');
+    return roll < 30 ? '二线城市' : '一线城市';
+  }
+
+  function birthRoll(seed, money) {
+    let n = (seed ^ Math.imul((money + 7) | 0, 2654435761)) | 0;
+    n = Math.imul(n ^ (n >>> 15), 2246822507);
+    n = Math.imul(n ^ (n >>> 13), 3266489909);
+    return ((n ^ (n >>> 16)) >>> 0) % 100;
+  }
+
+  function describeBirth(seed, money) {
+    const place = birthPlaceOf(money, birthRoll(seed, money));
+    const family = familyLevelOf(money);
+    return { place: place, family: family, text: '你出生在了' + place + '的' + family + '家庭。' };
   }
 
   // ---------------------------------------------------------------- 初始化
@@ -185,7 +224,9 @@
       happiness: clamp(Math.round(numberOr(override.happiness, base.happiness)), 0, 100)
     };
 
-    return {
+    const birth = describeBirth(seed >>> 0, resources.money);
+
+    const game = {
       version: VERSION,
       seed: seed >>> 0,
       rngState: seed >>> 0,
@@ -194,6 +235,7 @@
       origin: origin,
       talent: talent,
       attrMode: attrMode,
+      birth: birth,
       attrs: attrs,
       resources: resources,
       tags: [],
@@ -207,6 +249,9 @@
       yearsPlayed: 0,
       dead: false
     };
+
+    game.log.push({ age: 0, text: birth.text, kind: 'life' });
+    return game;
   }
 
   // ---------------------------------------------------------------- 数值改动
@@ -543,6 +588,7 @@
     ATTR_ALLOC_MAX: ATTR_ALLOC_MAX,
     ENDING_ORDER: ENDING_ORDER,
     createGame: createGame,
+    describeBirth: describeBirth,
     validateAttrs: validateAttrs,
     applyEffects: applyEffects,
     applyHealthDelta: applyHealthDelta,
