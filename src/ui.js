@@ -367,10 +367,20 @@
 
   // ------------------------------------------------------------ 游戏页
   function enterGame() {
+    renderBirthLine();
     renderHud();
     renderStats();
     renderLog();
     show('screen-game');
+  }
+
+  function renderBirthLine() {
+    var line = $('birth-line');
+    if (!line) return;
+    if (!state.birth) {
+      state.birth = C.describeBirth(state.seed, state.resources.money);
+    }
+    line.textContent = state.birth.text;
   }
 
   function renderHud() {
