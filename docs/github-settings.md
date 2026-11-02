@@ -120,12 +120,17 @@ classic PAT 则是 `repo` 权限。脚本只读本地 `labels.json`，不会改�
 
 ## 6. 配置完成后的验收
 
-- [x] 直接 `git push origin main` 被拒绝（分支保护已开启，强推与删除均禁用）
+- [x] 分支保护已开启：必须 PR、1 个批准、`hygiene` 通过、线性历史、禁止强推与删除
 - [x] 新建 PR 自动套用描述模板
 - [x] 标题写成「新增功能」时 CI 报错并给出正确格式示例（PR #1 负向验证通过）
 - [x] PR 页右侧能看到 `hygiene` 检查项
 - [x] 打开新建 Issue，能看到「缺陷报告 / 功能需求」两种表单
 - [x] 标签列表里 4 组标签齐全（18 个，已删掉 GitHub 默认标签避免语义重复）
+
+> **关于「管理员豁免」**：当前 `enforce_admins = false`，仓库所有者仍可直接推送或被允许绕过规则
+> （GitHub 会提示 `Bypassed rule violations`）。等第二位协作者加入、流程跑顺之后，把
+> Settings → Branches 里的 **Do not allow bypassing the above settings** 打开，
+> 才能真正做到「包括自己在内都必须走 PR」。注意打开后只有一位协作者时无人能批准，会卡住合并。
 
 ### 验收记录（2026-11-02）
 
