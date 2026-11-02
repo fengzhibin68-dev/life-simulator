@@ -69,7 +69,7 @@ git config commit.template .gitmessage   # 可选：提交时带模板
 - [ ] 玩法深度：事件池规模、结局分级、重开与随机种子
 - [ ] 核心循环与数值模型：年龄、属性、事件表、结局判定
 - [ ] 数据格式：事件 / 选项用 JSON 还是表格维护，谁负责内容
-- [ ] 目录分工：填进 [AGENTS.md](AGENTS.md) 第 2 节，与 `.github/CODEOWNERS` 保持一致
+- [ ] 目录分工：填进 [AGENTS.md](AGENTS.md) 的「任务边界」一节，与 `.github/CODEOWNERS` 保持一致
 - [ ] 许可证（License）与仓库可见性
 
 ## 约定
