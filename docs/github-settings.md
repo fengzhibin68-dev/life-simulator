@@ -6,34 +6,38 @@
 
 ---
 
-## 0. 先把本地骨架推上去
+## 0. 创建仓库并推送
 
-本地仓库已在 `D:\deepseek\Homework` 初始化，全部文件已 `git add`（**尚未提交**，因为这台机器还没配 git 身份）。按远端情况二选一：
+本地已经完成 `git init`、首次提交（`aaf4d7e`）和 `origin` 配置，只差推送这一步。建库时注意三个选项：
 
-**情况 A：远端仓库是空的**
+| 建库选项 | 取值 | 原因 |
+| --- | --- | --- |
+| Repository name | `Homework` | 与本地目录、CI、README 里的链接一致 |
+| Visibility | 公开或私有，见第 5 节的限制 | 私有仓库 + Free 计划没有分支保护 |
+| Initialize this repository with | **全部留空**（不加 README / .gitignore / license） | 本地已有这些文件，勾了会多出一个无关提交，推送前还得先合并 |
 
-```bash
-cd /d/deepseek/Homework
-git config user.name  "你的名字"
-git config user.email "你的邮箱"
-git commit -m "chore: 初始化双人协作骨架"
-git remote add origin https://github.com/sssttt972/Homework.git
+建好之后推送（Windows 上 `git` 不在 PATH 时用完整路径，例如 `D:\programme\Git\cmd\git.exe`）：
+
+```powershell
+cd D:\deepseek\Homework
 git push -u origin main
 ```
 
-**情况 B：远端已经有提交**
+成功的标志是输出 `* [new branch] main -> main`，之后 `git status` 显示 `Your branch is up to date with 'origin/main'`。
 
-不要强推，先把远端拉下来再叠加：
+推不上去通常是这两种：
+
+- `Repository not found`：仓库没建好、名字不一致，或当前登录的账号没有该仓库权限。
+- `schannel: AcquireCredentialsHandle failed`：TLS 后端问题，改用 OpenSSL，见 [git-workflow.md](git-workflow.md) 的「Windows 环境提示」。
+
+**如果建库时勾了 README，远端已有一个提交**：不要强推，先把远端提交叠上来。
 
 ```bash
-git clone https://github.com/sssttt972/Homework.git D:/deepseek/Homework-remote
-# 把 D:\deepseek\Homework 下（除 .git 外）的文件覆盖到 Homework-remote，
-# 冲突的文件逐个合并，不要直接覆盖远端已有内容
-cd /d/deepseek/Homework-remote
-git add -A
-git commit -m "chore: 补充双人协作配置"
-git push origin main
+git pull --rebase origin main
+git push -u origin main
 ```
+
+有冲突就逐个文件解决，`git add <文件>` 后 `git rebase --continue`。
 
 推上去之后，再往下做第 1 节。
 
