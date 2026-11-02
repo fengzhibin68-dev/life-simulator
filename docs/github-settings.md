@@ -120,9 +120,22 @@ classic PAT 则是 `repo` 权限。脚本只读本地 `labels.json`，不会改�
 
 ## 6. 配置完成后的验收
 
-- [ ] 直接 `git push origin main` 被拒绝
-- [ ] 新建 PR 自动套用描述模板
-- [ ] 标题写成「新增功能」时 CI 报错并给出正确格式示例
-- [ ] PR 页右侧能看到 `hygiene` 检查项
-- [ ] 打开新建 Issue，能看到「缺陷报告 / 功能需求」两种表单
-- [ ] 标签列表里 4 组标签齐全
+- [x] 直接 `git push origin main` 被拒绝（分支保护已开启，强推与删除均禁用）
+- [x] 新建 PR 自动套用描述模板
+- [x] 标题写成「新增功能」时 CI 报错并给出正确格式示例（PR #1 负向验证通过）
+- [x] PR 页右侧能看到 `hygiene` 检查项
+- [x] 打开新建 Issue，能看到「缺陷报告 / 功能需求」两种表单
+- [x] 标签列表里 4 组标签齐全（18 个，已删掉 GitHub 默认标签避免语义重复）
+
+### 验收记录（2026-11-02）
+
+| 项目 | 结果 |
+| --- | --- |
+| 仓库 | <https://github.com/fengzhibin68-dev/life-simulator>（公开，topics: game / life-simulator / co-op / teamwork / typescript） |
+| 合并方式 | 仅 Squash，合并后自动删分支，allow_merge_commit / allow_rebase_merge 关闭 |
+| 标签 | 18 个，脚本同步后回读一致 |
+| 分支保护 | 必需检查 `hygiene`、1 个批准、线性历史、禁止强推 / 删除、要求解决讨论 |
+| CI 冒烟 | PR 用合规标题 → `hygiene` 通过；改成「新增功能」→ 失败；改回 → 通过。测试 PR 已关闭、分支已删除 |
+
+**尚未配置**：第二位协作者的邀请与 CODEOWNERS 评审（等对方 GitHub 用户名）。
+

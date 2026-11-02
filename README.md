@@ -1,5 +1,7 @@
 # 人生模拟器（Life Simulator）
 
+[![CI](https://github.com/fengzhibin68-dev/life-simulator/actions/workflows/ci.yml/badge.svg)](https://github.com/fengzhibin68-dev/life-simulator/actions/workflows/ci.yml)
+
 以「人生选择」为核心的文字 / 数值模拟小游戏，设计目标是**双人协作**：两名玩家共同推进一段人生，分歧即玩法。
 
 > **当前阶段：协作骨架。** 仓库里只有工程协作配置与规范，还没有游戏代码，技术栈也尚未确定。
