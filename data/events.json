@@ -258,6 +258,7 @@
       "title": "孩子上学",
       "stage": "middle",
       "ageMin": 41, "ageMax": 52, "weight": 75, "cooldown": 3, "once": false, "tone": "neutral",
+      "conditions": [ { "target": "tag:有子女", "op": "==", "value": 1 } ],
       "text": "孩子的成绩单放在桌上，比你想的还难看。",
       "options": [
         { "text": "逼一把", "effects": { "stress": 8, "money": -3000 }, "check": { "attr": "eq", "difficulty": 55,
@@ -311,7 +312,7 @@
       "id": "event_0_sick",
       "title": "一场病",
       "stage": "general",
-      "ageMin": 0, "ageMax": 120, "weight": 45, "cooldown": 8, "once": false, "tone": "bad",
+      "ageMin": 18, "ageMax": 110, "weight": 45, "cooldown": 8, "once": false, "tone": "bad",
       "text": "换季的时候，你病倒了。",
       "options": [
         { "text": "好好休息", "effects": { "health": 3, "stress": -5, "money": -500 }, "log": "你请了几天假，睡了个够。" },
@@ -324,7 +325,7 @@
       "id": "event_0_lottery",
       "title": "一点小运气",
       "stage": "general",
-      "ageMin": 6, "ageMax": 120, "weight": 30, "cooldown": 10, "once": false, "tone": "good",
+      "ageMin": 18, "ageMax": 90, "weight": 30, "cooldown": 10, "once": false, "tone": "good",
       "text": "你在旧外套口袋里摸出一张彩票，居然中了。",
       "options": [
         { "text": "兑了，存起来", "effects": { "money": 8000, "happiness": 5 }, "log": "八千块，你谁也没告诉。" },
@@ -337,13 +338,224 @@
       "id": "event_0_accident",
       "title": "意外",
       "stage": "general",
-      "ageMin": 12, "ageMax": 120, "weight": 30, "cooldown": 10, "once": false, "tone": "bad",
+      "ageMin": 8, "ageMax": 100, "weight": 30, "cooldown": 10, "once": false, "tone": "bad",
       "text": "过马路时，一辆电动车从侧面冲了出来。",
       "options": [
         { "text": "躲一下", "effects": { "stress": 5 }, "check": { "attr": "constitution", "difficulty": 50,
           "success": { "effects": { "health": -2 }, "log": "只是擦破了点皮。" },
           "fail": { "effects": { "health": -4, "money": -3000 }, "log": "你在地上躺了很久，路人帮你打了 120。" } } },
         { "text": "站住不动", "effects": { "health": -3, "money": -2000 }, "log": "对方全责，但你疼了三个月。" }
+      ]
+    },
+    {
+      "id": "event_6_quarrel",
+      "title": "家里的争吵",
+      "stage": "child",
+      "ageMin": 6, "ageMax": 12, "weight": 85, "cooldown": 3, "once": false, "tone": "neutral",
+      "text": "夜里你被客厅的争吵声吵醒，父母的声音隔着门板传来，一句高过一句。",
+      "options": [
+        { "text": "走出去劝架", "check": { "attr": "eq", "difficulty": 50,
+          "success": { "effects": { "eq": 3, "happiness": 4 }, "tags": ["懂事的孩子"], "log": "母亲愣了一下，把你拉回房间，那晚之后家里安静了几天。" },
+          "fail": { "effects": { "stress": 8, "happiness": -3 }, "log": "争吵转向了你，你被吼回房间。" } } },
+        { "text": "假装睡着", "check": { "attr": "will", "difficulty": 45,
+          "success": { "effects": { "will": 3 }, "log": "你学会了在噪音里睡着。" },
+          "fail": { "effects": { "health": -2, "stress": 5 }, "log": "你一夜没睡好，第二天顶着黑眼圈去上学。" } } },
+        { "text": "打开门大哭", "effects": { "stress": -5, "happiness": 3 }, "tags": ["被保护的孩子"], "log": "争吵突然停了，母亲过来抱住了你。" }
+      ]
+    },
+    {
+      "id": "event_7_cat",
+      "title": "流浪猫",
+      "stage": "child",
+      "ageMin": 7, "ageMax": 12, "weight": 60, "cooldown": 99, "once": true, "tone": "good",
+      "text": "放学路上，一只瘦骨嶙峋的小猫跟着你走了两条街，在你脚边蹭来蹭去。",
+      "options": [
+        { "text": "带回家", "check": { "attr": "eq", "difficulty": 50,
+          "success": { "effects": { "happiness": 6 }, "tags": ["有爱心"], "log": "母亲叹了口气，找了个纸箱给它安了家。" },
+          "fail": { "effects": { "stress": 5, "happiness": -3 }, "log": "父亲坚决不同意，你只能把它放回楼下。" } } },
+        { "text": "买点吃的就走", "effects": { "money": -20, "happiness": 3 }, "log": "你在小卖部买了根火腿肠，看它吃完才走。" },
+        { "text": "狠心离开", "effects": { "happiness": -3 }, "log": "你加快脚步，没有回头。" }
+      ]
+    },
+    {
+      "id": "event_8_robbery",
+      "title": "走廊尽头",
+      "stage": "child",
+      "ageMin": 8, "ageMax": 12, "weight": 70, "cooldown": 99, "once": true, "tone": "bad",
+      "text": "几个高年级学生把你堵在走廊尽头，要你交出零花钱。你手心全是汗，后背贴着墙。",
+      "options": [
+        { "text": "反抗", "check": { "attr": "will", "difficulty": 55,
+          "success": { "effects": { "will": 4 }, "tags": ["不好惹"], "log": "他们没想到你敢还手，骂了几句走了。" },
+          "fail": { "effects": { "health": -8, "stress": 12 }, "log": "你被按在地上，膝盖擦破了皮。" } } },
+        { "text": "给钱走人", "effects": { "money": -100, "stress": 5, "happiness": -5 }, "log": "你掏出钱，他们笑着走了，你站在原地，手心还是湿的。" },
+        { "text": "告诉老师", "check": { "attr": "eq", "difficulty": 45,
+          "success": { "effects": { "eq": 3, "happiness": 2 }, "tags": ["会求助"], "log": "老师叫来了那几个人，事情解决了。" },
+          "fail": { "effects": { "happiness": -4 }, "tags": ["被排挤"], "log": "消息传开，你被说成打小报告的。" } } }
+      ]
+    },
+    {
+      "id": "event_13_gate",
+      "title": "翻墙出去",
+      "stage": "teen",
+      "ageMin": 13, "ageMax": 18, "weight": 85, "cooldown": 4, "once": false, "tone": "neutral",
+      "text": "下午第一节是班主任的课，朋友拉你翻墙去网吧，说就一次，不会有事。",
+      "options": [
+        { "text": "一起去", "check": { "attr": "luck", "difficulty": 50,
+          "success": { "effects": { "happiness": 6 }, "tags": ["网吧老手"], "log": "你们打到天黑，翻墙回去时差点被保安看见。" },
+          "fail": { "effects": { "stress": 10, "happiness": -8 }, "tags": ["被记过"], "log": "班主任在门口等着，家长被叫来了。" } } },
+        { "text": "拒绝，回教室", "check": { "attr": "will", "difficulty": 45,
+          "success": { "effects": { "will": 3, "intelligence": 2 }, "log": "那节课你听得很认真。" },
+          "fail": { "effects": { "happiness": -3 }, "log": "朋友说你不够意思，你有点后悔。" } } }
+      ]
+    },
+    {
+      "id": "event_14_outcast",
+      "title": "被孤立的朋友",
+      "stage": "teen",
+      "ageMin": 13, "ageMax": 18, "weight": 80, "cooldown": 5, "once": false, "tone": "neutral",
+      "text": "班里有个同学被大家起外号、传闲话，今天他一个人坐在食堂角落，低着头扒饭。",
+      "options": [
+        { "text": "坐过去一起吃饭", "check": { "attr": "eq", "difficulty": 50,
+          "success": { "effects": { "eq": 4, "happiness": 6 }, "tags": ["挚友"], "log": "你们成了朋友，后来很多年都还有联系。" },
+          "fail": { "effects": { "happiness": -4 }, "tags": ["被排挤"], "log": "第二天，你也开始被起外号。" } } },
+        { "text": "跟着大家起哄", "check": { "attr": "charm", "difficulty": 45,
+          "success": { "effects": { "happiness": 2 }, "log": "没人注意你，你混在人群里。" },
+          "fail": { "effects": { "stress": 8, "happiness": -6 }, "tags": ["愧疚"], "log": "他抬头看了你一眼，那一眼你记了很久。" } } },
+        { "text": "什么都不做", "effects": { "happiness": -2 }, "log": "你低头吃饭，假装没看见。" }
+      ]
+    },
+    {
+      "id": "event_15_latenight",
+      "title": "凌晨三点的屏幕",
+      "stage": "teen",
+      "ageMin": 14, "ageMax": 18, "weight": 75, "cooldown": 3, "once": false, "tone": "bad",
+      "text": "你连续一周熬夜打游戏，第二天上课总在打瞌睡。今晚队友又发来邀请。",
+      "options": [
+        { "text": "再打一局", "check": { "attr": "will", "difficulty": 45,
+          "success": { "effects": { "happiness": 3 }, "log": "你赢得很爽，天快亮才睡。" },
+          "fail": { "effects": { "health": -5, "stress": 5 }, "log": "第二天你在课上睡着，被老师点名。" } } },
+        { "text": "关机睡觉", "check": { "attr": "will", "difficulty": 50,
+          "success": { "effects": { "will": 3, "health": 3 }, "log": "你睡得很好，第二天精神不错。" },
+          "fail": { "effects": { "happiness": -3 }, "log": "你翻来覆去，最后还是拿起了手机。" } } }
+      ]
+    },
+    {
+      "id": "event_19_club",
+      "title": "社团招新",
+      "stage": "youth",
+      "ageMin": 19, "ageMax": 22, "weight": 85, "cooldown": 99, "once": true, "tone": "good",
+      "text": "百团大战，摊位挤满操场。你在一张报名表前停下，学长学姐热情地看着你。",
+      "options": [
+        { "text": "加入辩论社", "check": { "attr": "intelligence", "difficulty": 50,
+          "success": { "effects": { "intelligence": 3, "charm": 3, "happiness": 5 }, "log": "几个月后，你能站起来侃侃而谈。" },
+          "fail": { "effects": { "stress": 5, "happiness": -3 }, "log": "你发现自己并不喜欢那种紧张感。" } } },
+        { "text": "加入篮球队", "check": { "attr": "constitution", "difficulty": 50,
+          "success": { "effects": { "constitution": 5, "health": 3, "happiness": 6 }, "log": "你成了主力，球场上的风很好。" },
+          "fail": { "effects": { "health": -3, "happiness": -2 }, "log": "你坐了很久的板凳。" } } },
+        { "text": "回宿舍躺着", "effects": { "happiness": 2 }, "tags": ["宅"], "log": "你绕了一圈，回了宿舍。" }
+      ]
+    },
+    {
+      "id": "event_21_confess",
+      "title": "要不要说出口",
+      "stage": "youth",
+      "ageMin": 19, "ageMax": 28, "weight": 75, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "你和一个朋友认识三年了。今晚散步到江边，风很轻，你想说点什么，又怕连朋友都做不成。",
+      "options": [
+        { "text": "表白", "check": { "attr": "charm", "difficulty": 55,
+          "success": { "effects": { "happiness": 12, "charm": 2 }, "tags": ["恋爱中"], "log": "对方笑了，说等你这句话很久了。" },
+          "fail": { "effects": { "happiness": -8, "stress": 8 }, "tags": ["失恋"], "log": "对方沉默了一会儿，说还是做朋友吧。" } } },
+        { "text": "忍住，只聊天气", "check": { "attr": "eq", "difficulty": 45,
+          "success": { "effects": {}, "tags": ["挚友"], "log": "你们还是朋友，很多年后你偶尔会想起那晚。" },
+          "fail": { "effects": { "happiness": -4 }, "log": "你回家后翻来覆去，后悔了很久。" } } }
+      ]
+    },
+    {
+      "id": "event_22_kaoyan",
+      "title": "考研自习室",
+      "stage": "youth",
+      "ageMin": 21, "ageMax": 26, "weight": 70, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "自习室里全是埋头的人。你已经复习了八个月，桌上堆着半人高的书，还有一个月考试。",
+      "options": [
+        { "text": "最后一个月拼了", "check": { "attr": "will", "difficulty": 55,
+          "success": { "effects": { "intelligence": 4, "happiness": 10 }, "tags": ["研究生"], "log": "你考上了。" },
+          "fail": { "effects": { "stress": 15, "happiness": -10 }, "log": "差了十几分，你在自习室坐到熄灯。" } } },
+        { "text": "调整作息，稳住心态", "check": { "attr": "constitution", "difficulty": 45,
+          "success": { "effects": { "happiness": 6 }, "tags": ["研究生"], "log": "你发挥稳定，考上了。" },
+          "fail": { "effects": { "stress": 10, "happiness": -6 }, "log": "还是差了一点。" } } }
+      ]
+    },
+    {
+      "id": "event_23_startup",
+      "title": "创业的念头",
+      "stage": "youth",
+      "ageMin": 22, "ageMax": 32, "weight": 60, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "朋友拉你一起做项目，说风口就在眼前。你需要拿出积蓄，还要辞掉现在的工作。",
+      "options": [
+        { "text": "辞职 all in", "effects": { "money": -20000 }, "check": { "attr": "luck", "difficulty": 45,
+          "success": { "effects": { "money": 80000, "happiness": 12 }, "tags": ["创业成功"], "log": "项目跑起来了，你拿到了第一笔大单。" },
+          "fail": { "effects": { "stress": 20, "happiness": -12 }, "tags": ["创业失败"], "log": "钱烧完了，团队散了。" } } },
+        { "text": "先兼职试水", "check": { "attr": "will", "difficulty": 50,
+          "success": { "effects": { "money": 10000, "happiness": 5 }, "log": "副业有了起色，晚上写方案的辛苦没白费。" },
+          "fail": { "effects": { "money": -5000, "stress": 8 }, "log": "两边都没做好。" } } },
+        { "text": "拒绝，稳定要紧", "effects": { "happiness": -2 }, "tags": ["求稳"], "log": "你婉拒了朋友。" }
+      ]
+    },
+    {
+      "id": "event_26_kid",
+      "title": "要不要孩子",
+      "stage": "adult",
+      "ageMin": 26, "ageMax": 40, "weight": 75, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "伴侣和你聊起孩子。你们算了算时间、精力和钱，谁都没先开口。",
+      "options": [
+        { "text": "要一个", "check": { "attr": "constitution", "difficulty": 45,
+          "success": { "effects": { "happiness": 10 }, "tags": ["有子女", "好父母"], "log": "孩子出生那天，你在产房外哭了。" },
+          "fail": { "effects": { "stress": 12, "happiness": -5 }, "tags": ["有子女"], "log": "育儿比想象中累得多。" } } },
+        { "text": "再奋斗几年", "effects": { "stress": 5 }, "tags": ["丁克倾向"], "log": "你们说，等条件好一点。" },
+        { "text": "决定不要", "effects": { "happiness": 3 }, "tags": ["丁克"], "log": "你们认真谈了一次，做了决定。" }
+      ]
+    },
+    {
+      "id": "event_28_sidejob",
+      "title": "副业机会",
+      "stage": "adult",
+      "ageMin": 28, "ageMax": 45, "weight": 65, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "朋友说有个稳赚不赔的项目，投五万，一年回本。你看着存款，有点心动，又有点不安。",
+      "options": [
+        { "text": "投", "effects": { "money": -50000 }, "check": { "attr": "luck", "difficulty": 45,
+          "success": { "effects": { "money": 60000, "happiness": 8 }, "log": "一年后连本带利回来了。" },
+          "fail": { "effects": { "stress": 12, "happiness": -10 }, "tags": ["投资失败"], "log": "项目黄了，朋友也联系不上了。" } } },
+        { "text": "只投一点试试", "effects": { "money": -10000 }, "check": { "attr": "luck", "difficulty": 50,
+          "success": { "effects": { "money": 12000, "happiness": 3 }, "log": "小赚了一笔。" },
+          "fail": { "effects": { "stress": 6, "happiness": -4 }, "log": "钱没了，但不算伤筋动骨。" } } },
+        { "text": "不碰", "effects": { "happiness": 2 }, "tags": ["谨慎"], "log": "你婉拒了朋友。" }
+      ]
+    },
+    {
+      "id": "event_41_reunion",
+      "title": "老友重逢",
+      "stage": "middle",
+      "ageMin": 41, "ageMax": 65, "weight": 70, "cooldown": 8, "once": false, "tone": "good",
+      "text": "同学群里有人组织聚会。你翻着聊天记录，发现好多人已经十几年没见了。",
+      "options": [
+        { "text": "去，好好喝一杯", "check": { "attr": "eq", "difficulty": 45,
+          "success": { "effects": { "happiness": 8 }, "tags": ["挚友", "老友"], "log": "你们聊到深夜，约好以后常聚。" },
+          "fail": { "effects": { "happiness": 2 }, "log": "饭桌上全是比较和客套。" } } },
+        { "text": "只在群里冒个泡", "effects": { "happiness": 2 }, "log": "你发了个表情包，没去。" },
+        { "text": "不去，没意思", "effects": { "happiness": -3 }, "log": "你退出了群聊界面。" }
+      ]
+    },
+    {
+      "id": "event_20_mentor",
+      "title": "贵人",
+      "stage": "general",
+      "ageMin": 20, "ageMax": 60, "weight": 45, "cooldown": 10, "once": true, "tone": "good",
+      "text": "饭局上，一位长辈多看了你几眼，说「有点意思」。你端着杯子，不知道该怎么接。",
+      "options": [
+        { "text": "主动请教", "check": { "attr": "eq", "difficulty": 55,
+          "success": { "effects": { "money": 10000, "happiness": 8, "eq": 3 }, "tags": ["贵人相助"], "log": "他给了你一个机会，后来成了你的贵人。" },
+          "fail": { "effects": { "happiness": -2 }, "log": "他只是客气，聊了几句就走了。" } } },
+        { "text": "客气寒暄", "effects": { "happiness": 2 }, "log": "你笑了笑，说了几句场面话。" }
       ]
     }
   ]
