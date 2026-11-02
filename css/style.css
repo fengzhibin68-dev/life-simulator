@@ -75,6 +75,7 @@ h3 { font-size: 15px; margin: 22px 0 10px; color: var(--muted); font-weight: 600
 .btn.primary:hover { background: #9a4708; }
 .btn.tiny { padding: 4px 10px; font-size: 12px; margin: 0; }
 .btn.ghost { background: transparent; border-color: var(--line); }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 
 /* ---------- 创建页 ---------- */
 .field { display: block; margin-bottom: 8px; }
@@ -124,21 +125,20 @@ h3 { font-size: 15px; margin: 22px 0 10px; color: var(--muted); font-weight: 600
 .attr-name { font-size: 14px; }
 .attr-value { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
 
-.stepper { display: flex; gap: 8px; margin-top: 8px; }
-.step {
-  width: 34px;
-  height: 30px;
+.attr-input {
+  width: 74px;
+  padding: 4px 8px;
   border: 1px solid var(--line);
-  background: #fff;
   border-radius: 8px;
-  font-size: 17px;
-  line-height: 1;
-  color: var(--ink);
-  cursor: pointer;
+  background: #fff;
   font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
-.step:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-.step:disabled { opacity: .35; cursor: not-allowed; }
+.attr-input:focus { outline: 2px solid #f0d6bc; border-color: var(--accent); }
 
 .attr-tools { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .attr-tools .btn { margin-top: 0; }
