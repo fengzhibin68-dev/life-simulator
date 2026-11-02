@@ -2,35 +2,38 @@
 
 仓库文件（模板、CI、CODEOWNERS）已经写在本地，但**分支保护、标签、合并方式属于仓库后台设置**，必须建库之后配置一次。按下面的顺序做，全程约 10 分钟。
 
-> 前提：仓库 https://github.com/sssttt972/Homework 已经创建，内容也已推送。还没推的先看第 0 节。
+> 仓库：<https://github.com/fengzhibin68-dev/life-simulator>（公开，已推送）。
+> 本地目录：`D:\deepseek\life-simulator`。下面的设置项已经用脚本应用过一遍，保留步骤供新协作者复现或重装时参考。
 
 ---
 
-## 0. 创建仓库并推送
+## 0. 仓库现状
 
-本地已经完成 `git init`、首次提交（`aaf4d7e`）和 `origin` 配置，只差推送这一步。建库时注意三个选项：
+| 项目 | 值 |
+| --- | --- |
+| 仓库 | <https://github.com/fengzhibin68-dev/life-simulator>（公开） |
+| 本地目录 | `D:\deepseek\life-simulator` |
+| 默认分支 | `main` |
+| 首次推送 | 2026-11-02，`aaf4d7e` 骨架 + 后续文档提交 |
 
-| 建库选项 | 取值 | 原因 |
-| --- | --- | --- |
-| Repository name | `Homework` | 与本地目录、CI、README 里的链接一致 |
-| Visibility | 公开或私有，见第 5 节的限制 | 私有仓库 + Free 计划没有分支保护 |
-| Initialize this repository with | **全部留空**（不加 README / .gitignore / license） | 本地已有这些文件，勾了会多出一个无关提交，推送前还得先合并 |
+需要重建一次时按这个顺序（Windows 上 `git` 不在 PATH 时用完整路径，例如 `D:\programme\Git\cmd\git.exe`）：
 
-建好之后推送（Windows 上 `git` 不在 PATH 时用完整路径，例如 `D:\programme\Git\cmd\git.exe`）：
+1. 新建仓库，名字 `life-simulator`，**不要**勾 README / .gitignore / license（本地已有，勾了会多出无关提交）；
+2. 推送：
 
 ```powershell
-cd D:\deepseek\Homework
+cd D:\deepseek\life-simulator
 git push -u origin main
 ```
 
-成功的标志是输出 `* [new branch] main -> main`，之后 `git status` 显示 `Your branch is up to date with 'origin/main'`。
+成功的标志是 `* [new branch] main -> main`，之后 `git status` 显示 `Your branch is up to date with 'origin/main'`。
 
 推不上去通常是这两种：
 
 - `Repository not found`：仓库没建好、名字不一致，或当前登录的账号没有该仓库权限。
 - `schannel: AcquireCredentialsHandle failed`：TLS 后端问题，改用 OpenSSL，见 [git-workflow.md](git-workflow.md) 的「Windows 环境提示」。
 
-**如果建库时勾了 README，远端已有一个提交**：不要强推，先把远端提交叠上来。
+**如果远端已经预先有提交**（建库时勾了 README）：不要强推，先把远端提交叠上来。
 
 ```bash
 git pull --rebase origin main
@@ -38,8 +41,6 @@ git push -u origin main
 ```
 
 有冲突就逐个文件解决，`git add <文件>` 后 `git rebase --continue`。
-
-推上去之后，再往下做第 1 节。
 
 ## 1. 基础设置
 

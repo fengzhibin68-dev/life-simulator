@@ -7,8 +7,8 @@
 ## 1. 一次性初始化（每台机器做一次）
 
 ```bash
-git clone https://github.com/sssttt972/Homework.git
-cd Homework
+git clone https://github.com/fengzhibin68-dev/life-simulator.git
+cd life-simulator
 
 git config user.name  "你的名字"
 git config user.email "你的邮箱"

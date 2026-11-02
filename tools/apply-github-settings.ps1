@@ -31,8 +31,8 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$Owner = 'sssttt972',
-    [string]$Repo = 'Homework',
+    [string]$Owner = 'fengzhibin68-dev',
+    [string]$Repo = 'life-simulator',
     [string]$Branch = 'main',
     [string]$Token = $env:GITHUB_TOKEN,
     [string]$RequiredCheck = 'hygiene',
