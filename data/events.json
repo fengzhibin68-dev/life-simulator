@@ -1,0 +1,350 @@
+{
+  "version": 1,
+  "events": [
+    {
+      "id": "event_6_school",
+      "title": "开学第一天",
+      "stage": "child",
+      "ageMin": 6, "ageMax": 7, "weight": 100, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "{name} 背着新书包站在校门口，教室里全是陌生的脸。",
+      "options": [
+        { "text": "认真听讲", "effects": { "intelligence": 3, "stress": 2 }, "log": "第一堂课上，你把黑板上的每个字都抄了下来。" },
+        { "text": "和同桌套近乎", "effects": { "charm": 3, "eq": 2 }, "log": "你认识了人生第一个同桌。" },
+        { "text": "盯着窗外发呆", "effects": { "happiness": 3, "intelligence": -1 }, "log": "窗外有只鸟停在树上，你看了很久。" }
+      ]
+    },
+    {
+      "id": "event_8_hobby",
+      "title": "兴趣班",
+      "stage": "child",
+      "ageMin": 8, "ageMax": 12, "weight": 90, "cooldown": 3, "once": false, "tone": "neutral",
+      "text": "妈妈拿着三张传单问你：想学点什么？",
+      "options": [
+        { "text": "学奥数", "effects": { "stress": 8 }, "check": { "attr": "intelligence", "difficulty": 45,
+          "success": { "effects": { "intelligence": 6 }, "log": "你在奥数班上找到了乐趣。" },
+          "fail": { "effects": { "intelligence": 2, "happiness": -4 }, "log": "你听不懂，也没敢问。" } } },
+        { "text": "学画画", "effects": { "stress": -3 }, "check": { "attr": "charm", "difficulty": 40,
+          "success": { "effects": { "charm": 4, "happiness": 6 }, "tags": ["有特长"], "log": "老师把你的画贴在了墙上。" },
+          "fail": { "effects": { "happiness": 2 }, "log": "画得不好，但你挺开心。" } } },
+        { "text": "什么都不学", "effects": { "happiness": 5, "intelligence": -1 }, "log": "放学后你有很多时间。" }
+      ]
+    },
+    {
+      "id": "event_10_friend",
+      "title": "第一个朋友",
+      "stage": "child",
+      "ageMin": 9, "ageMax": 12, "weight": 85, "cooldown": 3, "once": false, "tone": "good",
+      "text": "班里转来一个不爱说话的同学，一个人坐在最后一排。",
+      "options": [
+        { "text": "主动跟他搭话", "effects": { "stress": 3 }, "check": { "attr": "charm", "difficulty": 45,
+          "success": { "effects": { "eq": 4, "happiness": 6 }, "tags": ["挚友"], "log": "你们成了朋友，一起走完了小学。" },
+          "fail": { "effects": { "happiness": -3 }, "log": "他低着头，一个字都没说。" } } },
+        { "text": "算了，各玩各的", "effects": {}, "log": "你们再没说过话。" }
+      ]
+    },
+    {
+      "id": "event_12_fever",
+      "title": "一场高烧",
+      "stage": "child",
+      "ageMin": 10, "ageMax": 12, "weight": 60, "cooldown": 2, "once": false, "tone": "bad",
+      "text": "半夜你烧到 39 度，脑袋昏沉沉的。",
+      "options": [
+        { "text": "忍到天亮", "effects": { "health": -8, "constitution": 2 }, "check": { "attr": "constitution", "difficulty": 55,
+          "success": { "effects": { "health": 4 }, "log": "天亮时烧退了一点，你熬过来了。" },
+          "fail": { "effects": { "health": -3 }, "log": "烧了三天，落下点病根。" } } },
+        { "text": "叫醒爸妈", "effects": { "health": 2, "stress": -3, "money": -300 }, "log": "爸妈连夜带你去医院，挂了两瓶水。" }
+      ]
+    },
+    {
+      "id": "event_13_rebel",
+      "title": "叛逆期",
+      "stage": "teen",
+      "ageMin": 13, "ageMax": 15, "weight": 95, "cooldown": 2, "once": false, "tone": "neutral",
+      "text": "妈妈说了一句「你看看人家孩子」，你摔门进了房间。",
+      "options": [
+        { "text": "顶回去", "effects": { "stress": -5, "happiness": 4, "eq": -2 }, "log": "你把憋了很久的话全说了出来。" },
+        { "text": "一句话不说", "effects": { "stress": 8, "will": 2 }, "log": "你把自己关在屋里，没吃晚饭。" },
+        { "text": "事后道个歉", "effects": { "stress": -2 }, "check": { "attr": "eq", "difficulty": 45,
+          "success": { "effects": { "eq": 5, "happiness": 5 }, "log": "妈妈愣了一下，然后抱了抱你。" },
+          "fail": { "effects": { "stress": 5 }, "log": "话说一半，又吵了起来。" } } }
+      ]
+    },
+    {
+      "id": "event_15_zhongkao",
+      "title": "中考",
+      "stage": "teen",
+      "ageMin": 15, "ageMax": 15, "weight": 100, "cooldown": 99, "once": true, "tone": "neutral",
+      "forced": true,
+      "text": "考场外的蝉叫得厉害，你攥着笔，手心全是汗。",
+      "options": [
+        { "text": "当成平常的考试", "effects": { "stress": 5 }, "check": { "attr": "intelligence", "difficulty": 52,
+          "success": { "effects": { "happiness": 8 }, "tags": ["重点高中"], "log": "你考上了重点高中。" },
+          "fail": { "effects": { "happiness": -8, "stress": 6 }, "tags": ["普通高中"], "log": "成绩一般，进了普通高中。" } } },
+        { "text": "前一晚通宵复习", "effects": { "health": -3, "stress": 10 }, "check": { "attr": "intelligence", "difficulty": 45,
+          "success": { "effects": { "happiness": 6 }, "tags": ["重点高中"], "log": "熬夜换来了一个不错的分数。" },
+          "fail": { "effects": { "happiness": -6 }, "tags": ["普通高中"], "log": "考场上困得睁不开眼。" } } },
+        { "text": "随便吧", "effects": { "happiness": 3 }, "tags": ["普通高中"], "log": "你交了卷，第一个走出考场。" }
+      ]
+    },
+    {
+      "id": "event_16_firstlove",
+      "title": "第一次心动",
+      "stage": "teen",
+      "ageMin": 16, "ageMax": 17, "weight": 80, "cooldown": 99, "once": true, "tone": "good",
+      "text": "后桌递来一张纸条，上面只写了三个字：「放学等我。」",
+      "options": [
+        { "text": "放学去操场", "effects": { "stress": 4 }, "check": { "attr": "charm", "difficulty": 50,
+          "success": { "effects": { "happiness": 12, "charm": 4 }, "tags": ["初恋"], "log": "你们在操场上走了三圈，谁都没说话。" },
+          "fail": { "effects": { "happiness": -6 }, "log": "等到的是一句「你别当真」。" } } },
+        { "text": "把纸条夹进书里", "effects": { "happiness": 3, "intelligence": 2 }, "log": "那张纸条你留了很多年。" }
+      ]
+    },
+    {
+      "id": "event_17_bully",
+      "title": "朋友出事了",
+      "stage": "teen",
+      "ageMin": 16, "ageMax": 18, "weight": 70, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "你看见几个高年级的把你朋友堵在了楼道尽头。",
+      "options": [
+        { "text": "冲上去", "effects": { "health": -2, "stress": 8 }, "check": { "attr": "will", "difficulty": 55,
+          "success": { "effects": { "will": 6, "charm": 4 }, "tags": ["讲义气"], "log": "你们俩一起挨了揍，也一起走进了办公室。" },
+          "fail": { "effects": { "happiness": -5, "health": -2 }, "log": "你被打了一顿，事情还是没解决。" } } },
+        { "text": "转身去叫老师", "effects": { "stress": 3 }, "check": { "attr": "eq", "difficulty": 40,
+          "success": { "effects": { "eq": 4, "happiness": 5 }, "log": "老师赶到，事情平息了。" },
+          "fail": { "effects": { "happiness": -4 }, "log": "老师来得太晚，朋友对你有怨气。" } } },
+        { "text": "装作没看见", "effects": { "happiness": -8, "stress": 5 }, "log": "你走开了，那一幕记了很多年。" }
+      ]
+    },
+    {
+      "id": "event_18_gaokao",
+      "title": "高考",
+      "stage": "teen",
+      "ageMin": 18, "ageMax": 18, "weight": 100, "cooldown": 99, "once": true, "tone": "neutral",
+      "forced": true,
+      "text": "十二年的书，压在这两天里。你走进考场，铃声刚好响起。",
+      "options": [
+        { "text": "全力冲刺", "effects": { "stress": 15, "health": -3 }, "check": { "attr": "intelligence", "difficulty": 55,
+          "success": { "effects": { "happiness": 12 }, "tags": ["大学生"], "log": "你考上了大学。" },
+          "fail": { "effects": { "happiness": -12, "stress": 10 }, "tags": ["落榜"], "log": "分数出来那天，你在楼下坐到天黑。" } } },
+        { "text": "保持平常心", "effects": { "stress": 3 }, "check": { "attr": "will", "difficulty": 50,
+          "success": { "effects": { "happiness": 8 }, "tags": ["大学生"], "log": "你发挥得很稳，进了大学。" },
+          "fail": { "effects": { "happiness": -8 }, "tags": ["落榜"], "log": "还是差了一点点。" } } }
+      ]
+    },
+    {
+      "id": "event_19_choice",
+      "title": "人生的岔路口",
+      "stage": "youth",
+      "ageMin": 19, "ageMax": 20, "weight": 100, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "同学们在讨论保研、考公、出国，你一个人坐在宿舍床上想：我到底要干什么？",
+      "options": [
+        { "text": "继续读书", "effects": { "stress": 6 }, "check": { "attr": "intelligence", "difficulty": 50,
+          "success": { "effects": { "intelligence": 8 }, "tags": ["高学历"], "log": "你决定继续深造。" },
+          "fail": { "effects": { "stress": 6, "happiness": -4 }, "log": "你试了，但没能继续读下去。" } } },
+        { "text": "找份工作先干着", "effects": { "money": 3000 }, "tags": ["打工人"], "log": "你决定先赚钱，剩下的以后再说。" },
+        { "text": "试着自己做点事", "effects": { "money": -1000, "stress": 10 }, "check": { "attr": "luck", "difficulty": 55,
+          "success": { "effects": { "money": 6000, "will": 5 }, "tags": ["创业者"], "log": "第一笔小生意居然赚了。" },
+          "fail": { "effects": { "money": -2000, "happiness": -6 }, "log": "钱赔进去了，还欠了同学一顿饭。" } } }
+      ]
+    },
+    {
+      "id": "event_20_love",
+      "title": "恋爱",
+      "stage": "youth",
+      "ageMin": 20, "ageMax": 25, "weight": 80, "cooldown": 4, "once": false, "tone": "good",
+      "text": "有人在雨天把伞倾向了你这一边。",
+      "options": [
+        { "text": "认真谈一段", "effects": { "money": -800, "stress": 5 }, "check": { "attr": "eq", "difficulty": 50,
+          "success": { "effects": { "happiness": 12, "charm": 3 }, "tags": ["恋爱中"], "log": "你们在一起了。" },
+          "fail": { "effects": { "happiness": -8 }, "log": "三个月后，你们和平分手。" } } },
+        { "text": "保持距离", "effects": { "happiness": -3, "stress": -2 }, "log": "你怕耽误正事，没有进一步。" }
+      ]
+    },
+    {
+      "id": "event_21_rent",
+      "title": "第一间出租屋",
+      "stage": "youth",
+      "ageMin": 21, "ageMax": 25, "weight": 75, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "十平米，一张床一张桌子，窗对着别人家的墙。房租占了你工资的三分之一。",
+      "options": [
+        { "text": "租远一点省钱", "effects": { "money": 600, "health": -2, "stress": 4 }, "log": "每天通勤三个小时。" },
+        { "text": "租近一点，贵就贵", "effects": { "money": -1200, "happiness": 6 }, "log": "省下来的时间，你终于能好好睡觉了。" }
+      ]
+    },
+    {
+      "id": "event_23_job",
+      "title": "第一份工作",
+      "stage": "youth",
+      "ageMin": 22, "ageMax": 25, "weight": 90, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "面试官翻着你的简历问：「你觉得自己最大的缺点是什么？」",
+      "options": [
+        { "text": "老实回答", "effects": { "stress": 4 }, "check": { "attr": "eq", "difficulty": 45,
+          "success": { "effects": { "money": 2000, "eq": 4 }, "tags": ["有工作"], "log": "面试官笑了，说「欢迎加入」。" },
+          "fail": { "effects": { "happiness": -8 }, "tags": ["待业"], "log": "「回去等通知吧。」" } } },
+        { "text": "背标准答案", "effects": { "stress": 6 }, "check": { "attr": "charm", "difficulty": 50,
+          "success": { "effects": { "money": 1800 }, "tags": ["有工作"], "log": "你拿到了 offer。" },
+          "fail": { "effects": { "happiness": -6 }, "tags": ["待业"], "log": "对方一眼看穿了。" } } }
+      ]
+    },
+    {
+      "id": "event_24_overtime",
+      "title": "加班",
+      "stage": "youth",
+      "ageMin": 23, "ageMax": 28, "weight": 80, "cooldown": 2, "once": false, "tone": "bad",
+      "text": "晚上十一点，办公室只剩你这一排的灯还亮着。",
+      "options": [
+        { "text": "咬牙做完", "effects": { "health": -2, "stress": 10, "money": 800 }, "log": "项目上线了，你也熬瘦了。" },
+        { "text": "准点下班", "effects": { "stress": -6, "happiness": 5 }, "check": { "attr": "will", "difficulty": 45,
+          "success": { "effects": {}, "log": "领导虽然脸色不好，但什么也没说。" },
+          "fail": { "effects": { "happiness": -5 }, "log": "第二天晨会上，你被点了名。" } } }
+      ]
+    },
+    {
+      "id": "event_27_promotion",
+      "title": "晋升机会",
+      "stage": "adult",
+      "ageMin": 27, "ageMax": 35, "weight": 80, "cooldown": 99, "once": true, "tone": "good",
+      "text": "组里空出一个主管的位置，你和另一个同事都在候选名单上。",
+      "options": [
+        { "text": "主动争取", "effects": { "stress": 10 }, "check": { "attr": "eq", "difficulty": 62,
+          "success": { "effects": { "money": 4000, "charm": 3 }, "tags": ["事业成功"], "log": "你成了主管。" },
+          "fail": { "effects": { "happiness": -8, "money": -500 }, "log": "位置给了别人。" } } },
+        { "text": "专注把活干好", "effects": { "stress": 3 }, "check": { "attr": "intelligence", "difficulty": 50,
+          "success": { "effects": { "money": 2000, "intelligence": 3 }, "log": "年底评优，领导记住了你的名字。" },
+          "fail": { "effects": { "happiness": -3 }, "log": "活是你干的，功劳不是。" } } }
+      ]
+    },
+    {
+      "id": "event_29_marriage",
+      "title": "要不要结婚",
+      "stage": "adult",
+      "ageMin": 28, "ageMax": 38, "weight": 80, "cooldown": 99, "once": true, "tone": "good",
+      "text": "双方父母在饭桌上把话挑明了：什么时候办事？",
+      "options": [
+        { "text": "办", "effects": { "money": -20000, "stress": 8 }, "check": { "attr": "eq", "difficulty": 45,
+          "success": { "effects": { "happiness": 15, "health": 3 }, "tags": ["已婚"], "log": "婚礼那天，你笑得合不上嘴。" },
+          "fail": { "effects": { "happiness": -6 }, "log": "两家为了彩礼闹得不太愉快。" } } },
+        { "text": "再等等", "effects": { "happiness": -4, "stress": 3 }, "log": "你们说好，等条件好一点再说。" }
+      ]
+    },
+    {
+      "id": "event_32_house",
+      "title": "买房",
+      "stage": "adult",
+      "ageMin": 30, "ageMax": 40, "weight": 75, "cooldown": 99, "once": true, "tone": "neutral",
+      "text": "中介说这套房再不定就没了，首付要掏空你所有积蓄。",
+      "options": [
+        { "text": "咬牙上车", "effects": { "money": -80000, "stress": 15 }, "check": { "attr": "will", "difficulty": 50,
+          "success": { "effects": { "happiness": 8 }, "tags": ["有房"], "log": "拿到钥匙那天，你在空房子里坐了很久。" },
+          "fail": { "effects": { "happiness": -10, "stress": 10 }, "tags": ["有房"], "log": "房贷比想象中重。" } } },
+        { "text": "继续租房", "effects": { "money": 2000, "happiness": -3 }, "log": "你把钱留在了手里。" }
+      ]
+    },
+    {
+      "id": "event_36_checkup",
+      "title": "体检报告",
+      "stage": "adult",
+      "ageMin": 33, "ageMax": 45, "weight": 70, "cooldown": 3, "once": false, "tone": "bad",
+      "text": "体检报告上有三项飘红，医生皱着眉说：「你这个年纪，该注意了。」",
+      "options": [
+        { "text": "开始运动", "effects": { "stress": -5, "money": -500 }, "check": { "attr": "will", "difficulty": 45,
+          "success": { "effects": { "health": 10, "constitution": 4 }, "log": "半年后复查，指标全回来了。" },
+          "fail": { "effects": { "health": 2 }, "log": "办了三年的健身卡，去了四次。" } } },
+        { "text": "先不管", "effects": { "health": -2, "stress": 3 }, "log": "你把报告塞进了抽屉最底下。" }
+      ]
+    },
+    {
+      "id": "event_43_child",
+      "title": "孩子上学",
+      "stage": "middle",
+      "ageMin": 41, "ageMax": 52, "weight": 75, "cooldown": 3, "once": false, "tone": "neutral",
+      "text": "孩子的成绩单放在桌上，比你想的还难看。",
+      "options": [
+        { "text": "逼一把", "effects": { "stress": 8, "money": -3000 }, "check": { "attr": "eq", "difficulty": 55,
+          "success": { "effects": { "happiness": 6, "health": 2 }, "tags": ["有子女"], "log": "孩子后来考上了不错的学校。" },
+          "fail": { "effects": { "happiness": -8 }, "log": "孩子一连两个月没跟你说话。" } } },
+        { "text": "聊聊看", "effects": { "stress": -2 }, "check": { "attr": "eq", "difficulty": 40,
+          "success": { "effects": { "happiness": 8 }, "tags": ["有子女"], "log": "你们聊到半夜，孩子第一次说了心里话。" },
+          "fail": { "effects": { "happiness": -3 }, "log": "「你不懂。」孩子关上了门。" } } }
+      ]
+    },
+    {
+      "id": "event_48_parents",
+      "title": "父母老了",
+      "stage": "middle",
+      "ageMin": 45, "ageMax": 58, "weight": 80, "cooldown": 3, "once": false, "tone": "bad",
+      "text": "电话里，妈妈的声音越来越轻：「没事，你别回来了，忙你的。」",
+      "options": [
+        { "text": "请假回去", "effects": { "money": -3000, "stress": -5 }, "check": { "attr": "eq", "difficulty": 35,
+          "success": { "effects": { "happiness": 10 }, "log": "你陪他们住了三天，什么也没干。" },
+          "fail": { "effects": { "happiness": 4, "money": -2000 }, "log": "回去的路上你又接了三个工作电话。" } } },
+        { "text": "多打点钱", "effects": { "money": -5000, "happiness": -3 }, "log": "钱到了，人没到。" }
+      ]
+    },
+    {
+      "id": "event_52_layoff",
+      "title": "裁员名单",
+      "stage": "middle",
+      "ageMin": 48, "ageMax": 58, "weight": 70, "cooldown": 99, "once": true, "tone": "bad",
+      "text": "HR 把你叫进会议室，桌上放着一份文件。",
+      "options": [
+        { "text": "争取补偿", "effects": { "stress": 10 }, "check": { "attr": "eq", "difficulty": 55,
+          "success": { "effects": { "money": 30000 }, "log": "你拿到了 N+3，比预想的多。" },
+          "fail": { "effects": { "money": 8000, "happiness": -10 }, "log": "谈崩了，最后只拿到基本补偿。" } } },
+        { "text": "签字走人", "effects": { "money": 15000, "happiness": -12, "stress": 8 }, "log": "你在工位上坐到下班，然后收拾了东西。" }
+      ]
+    },
+    {
+      "id": "event_55_body",
+      "title": "身体报警",
+      "stage": "middle",
+      "ageMin": 52, "ageMax": 62, "weight": 70, "cooldown": 6, "once": false, "tone": "bad",
+      "text": "半夜，胸口闷得厉害，你坐起来，额头全是汗。",
+      "options": [
+        { "text": "马上去医院", "effects": { "money": -8000, "stress": -4 }, "check": { "attr": "constitution", "difficulty": 40,
+          "success": { "effects": { "health": 8 }, "log": "查出是早期，及时治好了。" },
+          "fail": { "effects": { "health": -3 }, "log": "住了一周院，花了不少钱。" } } },
+        { "text": "忍一忍再说", "effects": { "health": -3, "happiness": -4 }, "log": "你翻了个身，把这件事忘了。" }
+      ]
+    },
+    {
+      "id": "event_0_sick",
+      "title": "一场病",
+      "stage": "general",
+      "ageMin": 0, "ageMax": 120, "weight": 45, "cooldown": 8, "once": false, "tone": "bad",
+      "text": "换季的时候，你病倒了。",
+      "options": [
+        { "text": "好好休息", "effects": { "health": 3, "stress": -5, "money": -500 }, "log": "你请了几天假，睡了个够。" },
+        { "text": "扛过去", "effects": { "health": -3, "stress": 3 }, "check": { "attr": "constitution", "difficulty": 50,
+          "success": { "effects": { "constitution": 3 }, "log": "你扛过来了，体质好像还结实了一点。" },
+          "fail": { "effects": { "health": -2 }, "log": "拖成了肺炎，挂了半个月的水。" } } }
+      ]
+    },
+    {
+      "id": "event_0_lottery",
+      "title": "一点小运气",
+      "stage": "general",
+      "ageMin": 6, "ageMax": 120, "weight": 30, "cooldown": 10, "once": false, "tone": "good",
+      "text": "你在旧外套口袋里摸出一张彩票，居然中了。",
+      "options": [
+        { "text": "兑了，存起来", "effects": { "money": 8000, "happiness": 5 }, "log": "八千块，你谁也没告诉。" },
+        { "text": "请朋友们吃一顿", "effects": { "money": -2000, "happiness": 12, "charm": 3 }, "check": { "attr": "charm", "difficulty": 30,
+          "success": { "effects": { "eq": 4 }, "tags": ["挚友"], "log": "那顿饭吃到半夜，你们成了真朋友。" },
+          "fail": { "effects": {}, "log": "人来了不少，第二天没一个人回请。" } } }
+      ]
+    },
+    {
+      "id": "event_0_accident",
+      "title": "意外",
+      "stage": "general",
+      "ageMin": 12, "ageMax": 120, "weight": 30, "cooldown": 10, "once": false, "tone": "bad",
+      "text": "过马路时，一辆电动车从侧面冲了出来。",
+      "options": [
+        { "text": "躲一下", "effects": { "stress": 5 }, "check": { "attr": "constitution", "difficulty": 50,
+          "success": { "effects": { "health": -2 }, "log": "只是擦破了点皮。" },
+          "fail": { "effects": { "health": -4, "money": -3000 }, "log": "你在地上躺了很久，路人帮你打了 120。" } } },
+        { "text": "站住不动", "effects": { "health": -3, "money": -2000 }, "log": "对方全责，但你疼了三个月。" }
+      ]
+    }
+  ]
+}
