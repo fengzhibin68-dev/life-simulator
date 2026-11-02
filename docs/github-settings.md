@@ -144,3 +144,29 @@ classic PAT 则是 `repo` 权限。脚本只读本地 `labels.json`，不会改�
 
 **尚未配置**：第二位协作者的邀请与 CODEOWNERS 评审（等对方 GitHub 用户名）。
 
+## 7. 第二位协作者加入后的收尾
+
+拿到对方的 **GitHub 用户名**（主页地址里 `github.com/` 后面那段，不是邮箱）后，按这个顺序做，**顺序不能换**：
+
+1. **发邀请，给 Write 权限**
+   - 网页：Settings → Collaborators → Add people → 输入用户名 → 选 `Write`
+   - 命令（把 `<username>` 换掉）：
+
+     ```bash
+     curl -X PUT \
+       -H "Authorization: Bearer $GITHUB_TOKEN" \
+       -H "Accept: application/vnd.github+json" \
+       https://api.github.com/repos/fengzhibin68-dev/life-simulator/collaborators/<username> \
+       -d '{"permission":"push"}'
+     ```
+
+2. **等对方接受**（邮件邀请，或 github.com/notifications 里同意）
+3. **把用户名写进 [.github/CODEOWNERS](../.github/CODEOWNERS)**，替换掉注释里的占位行
+4. **再打开两条规则**：Settings → Branches → 编辑 `main` 规则
+   - `Require review from Code Owners`
+   - `Do not allow bypassing the above settings`（即 `enforce_admins`）
+
+> 顺序反了会卡死：先开 Code Owner 评审、但对方还不是协作者，PR 会一直等一个永远不会出现的评审人。
+> 同理，如果只有一位可评审的人，`enforce_admins` 打开后自己也不能合并，必须等对方批准。
+
+
